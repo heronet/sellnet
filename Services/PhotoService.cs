@@ -20,7 +20,6 @@ namespace sellnet.Services
             var acc = new Account(apiKey: apiKey, apiSecret: apiSecret, cloud: cloudName);
             _cloudinary = new Cloudinary(account: acc);
         }
-
         public async Task<ImageUploadResult> AddPhotoAsync(IFormFile file, string placeholder = null)
         {
             int width = 500, height = 500, quality = 50;
