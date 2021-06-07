@@ -162,8 +162,6 @@ namespace sellnet.Controllers
                 if (result.Error != null)
                     BadRequest("Can't Delete Product");
             }
-            if (product.ThumbnailId != null) // Check because old ads don't have a thumbnailurl
-                await _photoService.DeletePhotoAsync(product.ThumbnailId);
             _dbContext.Products.Remove(product);
             if (await _dbContext.SaveChangesAsync() > 0)
                 return Ok(new { Message = "Product Deleted successfully" });

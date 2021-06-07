@@ -79,8 +79,8 @@ namespace sellnet.Controllers
             var products = await _dbContext.Products
                 .Where(e => e.SupplierId == supplier.Id)
                 .ToListAsync();
-            _dbContext.RemoveRange(products);
-            _dbContext.Users.Remove(supplier);
+            _dbContext.Products.RemoveRange(products);
+            await _userManager.DeleteAsync(supplier);
 
             if (await _dbContext.SaveChangesAsync() > 0)
                 return NoContent();
