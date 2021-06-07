@@ -30,7 +30,7 @@ namespace sellnet.Controllers
         }
         [AllowAnonymous]
         [HttpGet("all", Name = "GetProducts")]
-        public async Task<ActionResult> GetProducts(string name, string category, string division, string city, int pageSize, int pageNumber, string sortParam)
+        public async Task<ActionResult> GetProducts(string name, string category, string division, string city, int pageSize, int pageNumber, string sortParam, string sellerId)
         {
             var productsQuery = _dbContext.Products
                 .Include(p => p.Supplier)
@@ -39,7 +39,8 @@ namespace sellnet.Controllers
                 .Where(p => (category == null || p.CategoryName == category.ToLower()))
                 .Where(p => (city == null || p.Supplier.City == city.ToLower()))
                 .Where(p => (division == null || p.Supplier.Division == division.ToLower()));
-
+            if (sellerId != null)
+                productsQuery = productsQuery.Where(p => p.SupplierId == sellerId);
             switch (sortParam?.ToLower())
             {
                 case "price: low to high":
@@ -153,7 +154,7 @@ namespace sellnet.Controllers
                 .SingleOrDefaultAsync();
             if (product == null)
                 return BadRequest("Couldn't find product");
-            if (product.SupplierId != supplier.Id)
+            if (product.SupplierId != supplier.Id && !roles.Contains("Admin"))
                 return Unauthorized("You cannot delete this product");
             foreach (var photo in product.Photos)
             {

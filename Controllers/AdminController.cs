@@ -10,7 +10,7 @@ using sellnet.Services;
 
 namespace sellnet.Controllers
 {
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : DefaultController
     {
         private readonly UserManager<Supplier> _userManager;
