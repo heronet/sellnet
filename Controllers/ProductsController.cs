@@ -202,9 +202,10 @@ namespace sellnet.Controllers
         }
         private SupplierInfoDTO SupplierToDto(Supplier supplier)
         {
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             return new SupplierInfoDTO
             {
-                Name = supplier.Name,
+                Name = textInfo.ToTitleCase(supplier.Name),
                 Id = supplier.Id,
                 Phone = supplier.PhoneNumber,
                 Email = supplier.Email
