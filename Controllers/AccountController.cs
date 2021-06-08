@@ -59,8 +59,8 @@ namespace sellnet.Controllers
                 UserName = registerDTO.Email.ToLower().Trim(),
                 Email = registerDTO.Email.ToLower().Trim(),
                 PhoneNumber = registerDTO.Phone,
-                City = city,
-                Division = division
+                City = city.ToLower(),
+                Division = division.ToLower()
             };
             var result = await _userManager.CreateAsync(supplier, password: registerDTO.Password);
             if (!result.Succeeded) return BadRequest(result);
