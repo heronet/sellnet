@@ -55,7 +55,7 @@ namespace sellnet.Controllers
                 return BadRequest("Invalid Division");
             var supplier = new Supplier
             {
-                Name = registerDTO.Name.ToLower().Trim(),
+                Name = registerDTO.Name.Trim(),
                 UserName = registerDTO.Email.ToLower().Trim(),
                 Email = registerDTO.Email.ToLower().Trim(),
                 PhoneNumber = registerDTO.Phone,
