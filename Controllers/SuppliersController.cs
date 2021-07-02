@@ -80,11 +80,9 @@ namespace sellnet.Controllers
                 .Where(e => e.SupplierId == supplier.Id)
                 .ToListAsync();
             _dbContext.Products.RemoveRange(products);
+            await _dbContext.SaveChangesAsync();
             await _userManager.DeleteAsync(supplier);
-
-            if (await _dbContext.SaveChangesAsync() > 0)
-                return NoContent();
-            return Ok("Failed to delete supplier");
+            return NoContent();
         }
 
         private SupplierInfoDTO SupplierToDto(Supplier supplier, List<string> roles)

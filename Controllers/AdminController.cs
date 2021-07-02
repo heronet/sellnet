@@ -17,18 +17,21 @@ namespace sellnet.Controllers
         private readonly SignInManager<Supplier> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly TokenService _tokenService;
+        private readonly UtilityService _utilityService;
 
         public AdminController(
             UserManager<Supplier> userManager,
             SignInManager<Supplier> signInManager,
             RoleManager<IdentityRole> roleManager,
-            TokenService tokenService
+            TokenService tokenService,
+            UtilityService utilityService
         )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _tokenService = tokenService;
+            _utilityService = utilityService;
         }
         [HttpPost("register")]
         public async Task<ActionResult<SupplierAuthDTO>> RegisterAdmin(RegisterDTO registerDTO)
@@ -41,12 +44,20 @@ namespace sellnet.Controllers
                 if (!roleResult.Succeeded)
                     return BadRequest(roleResult);
             }
+            var city = _utilityService.Cities.Where(city => city.ToLower() == registerDTO.City.Trim().ToLower()).SingleOrDefault();
+            if (city == null)
+                return BadRequest("Invalid City");
+            var division = _utilityService.Divisions.Where(d => d.ToLower() == registerDTO.Division.ToLower().Trim()).SingleOrDefault();
+            if (division == null)
+                return BadRequest("Invalid Division");
             var supplier = new Supplier
             {
-                Name = registerDTO.Name.ToLower().Trim(),
+                Name = registerDTO.Name.Trim(),
                 UserName = registerDTO.Email.ToLower().Trim(),
                 Email = registerDTO.Email.ToLower().Trim(),
-                PhoneNumber = registerDTO.Phone
+                PhoneNumber = registerDTO.Phone,
+                City = city.ToLower(),
+                Division = division.ToLower()
             };
             var result = await _userManager.CreateAsync(supplier, password: registerDTO.Password);
             if (!result.Succeeded) return BadRequest(result);
