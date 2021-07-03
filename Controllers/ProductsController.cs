@@ -36,9 +36,9 @@ namespace sellnet.Controllers
                 .Include(p => p.Supplier)
                 .Include(p => p.Photos)
                 .Where(p => (name == null || p.Name.ToLower().Contains(name.ToLower())))
-                .Where(p => (category == null || p.CategoryName == category.ToLower()))
-                .Where(p => (city == null || p.Supplier.City == city.ToLower()))
-                .Where(p => (division == null || p.Supplier.Division == division.ToLower()));
+                .Where(p => (category == null || p.CategoryName.ToLower() == category.ToLower()))
+                .Where(p => (city == null || p.Supplier.City.ToLower() == city.ToLower()))
+                .Where(p => (division == null || p.Supplier.Division.ToLower() == division.ToLower()));
             if (sellerId != null)
                 productsQuery = productsQuery.Where(p => p.SupplierId == sellerId);
             switch (sortParam?.ToLower())
